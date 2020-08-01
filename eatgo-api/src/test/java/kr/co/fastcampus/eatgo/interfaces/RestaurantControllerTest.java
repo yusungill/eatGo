@@ -86,11 +86,11 @@ class RestaurantControllerTest {
     @Test
     public void create() throws Exception {
 
+        Restaurant restaurant = new Restaurant(1234L,"BeRyong","Seoul");
 
         mvc.perform(post("/restaurants")
                 .contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"name\":\"BeRyong\",\"address\":\"Busan\"}")
-                    )
+                .content("{\"name\":\"BeRyong\",\"address\":\"Busan\"}"))
                 .andExpect(status().isCreated())
                 .andExpect(header().string("location", "/restaurants/1234"))
                 .andExpect(content().string("{}"));
