@@ -178,12 +178,11 @@ class RestaurantControllerTest {
     @Test
     public void updateWithInvalidData() throws Exception {
 
-        mvc.perform(patch("/restaurants/1004")
+        mvc.perform(patch("/restaurants/1003")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"\",\"address\":\" \"}"))
                 .andExpect(status().isBadRequest());
 
-        verify(restaurantService).updateRestaurant(1004L,"JOKER Bar","Busan");
 
     }
 
@@ -194,7 +193,6 @@ class RestaurantControllerTest {
                 .content("{\"name\":\"\",\"address\":\"Busan\"}"))
                 .andExpect(status().isBadRequest());
 
-        verify(restaurantService).updateRestaurant(1004L,"JOKER Bar","Busan");
 
     }
 
