@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,9 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 class RestaurantServiceTest {
 
@@ -26,13 +27,30 @@ class RestaurantServiceTest {
     @Mock
     private MenuItemRepository menuItemRepository;
 
+    @Mock
+    private ReviewRepository reviewRepository;
+
     @BeforeEach
     public void setUp(){
         MockitoAnnotations.initMocks(this);
-        restaurantService =new RestaurantService(restaurantRepository,menuItemRepository);
+        restaurantService =new RestaurantService(restaurantRepository,menuItemRepository, reviewRepository);
 
+        mockReviewRepository();
         mockRestaurantRepository();
         mockMenuItemRepository();
+    }
+
+    private void mockReviewRepository() {
+        List<Review> reviews = new ArrayList<>();
+
+        reviews.add(Review.builder()
+                .name("BeRyong")
+                .score(1)
+                .description("Bad")
+                .build());
+
+        given(reviewRepository.findAllByRestaurantId(1004L)).willReturn(reviews);
+
     }
 
 
@@ -45,8 +63,6 @@ class RestaurantServiceTest {
                 .address("Seoul")
                 .build();
 
-
-
         restaurants.add(restaurant);
 
 
@@ -56,9 +72,23 @@ class RestaurantServiceTest {
     }
 
     @Test
+    private void mockMenuItemRepository() {
+
+        List<MenuItem> menuItems = new ArrayList<>();
+        MenuItem menuItem = MenuItem
+                .builder()
+                .name("Kimchi")
+                .build();
+        menuItems.add(menuItem);
+        given(menuItemRepository.findAllByRestaurantId(1004L)).willReturn(menuItems);
+    }
+
+    @Test
     public void getRestaurants() {
 
         List<Restaurant> restaurants = restaurantService.getRestaurants();
+
+
 
         Restaurant restaurant = restaurants.get(0);
         assertThat(restaurant.getId(),is(1004L));
@@ -66,25 +96,23 @@ class RestaurantServiceTest {
 
 
     @Test
-    private void mockMenuItemRepository() {
-
-        List<MenuItem> menuItems = new ArrayList<>();
-        MenuItem menuItem = MenuItem
-                                    .builder()
-                                    .name("Kimchi")
-                                    .build();
-        menuItems.add(menuItem);
-        given(menuItemRepository.findAllByRestaurantId(1004L)).willReturn(menuItems);
-    }
-
-    @Test
     void getRestaurantWithExisted() {
 
         Restaurant restaurant = restaurantService.getRestaurant(1004L);
         assertThat(restaurant.getId(), is(1004L));
+
+        verify(menuItemRepository).findAllByRestaurantId(eq(1004L));
+        verify(reviewRepository).findAllByRestaurantId(eq(1004L));
+
         MenuItem menuItem = restaurant.getMenuItems().get(0);
         assertThat(menuItem.getName() , is("Kimchi"));
+
+        Review review = restaurant.getReviews().get(0);
+        assertThat(review.getDescription(),is("Bad"));
+
     }
+
+
 
     @Test
     void addRestaurant(){
@@ -100,9 +128,6 @@ class RestaurantServiceTest {
                 .name("BeRyong")
                 .address("Busan")
                 .build();
-
-
-
 
         Restaurant created = restaurantService.addRestaurant(restaurant);
         assertThat(created.getId(),is(1234L));
