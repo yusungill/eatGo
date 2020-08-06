@@ -45,6 +45,7 @@ class RestaurantServiceTest {
         Restaurant restaurant = Restaurant.builder()
                 .id(1004L)
                 .name("Bob zip")
+                .categoryId(1L)
                 .address("Seoul")
                 .build();
 

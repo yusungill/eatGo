@@ -1,6 +1,5 @@
 package kr.co.fastcampus.eatgo.application;
 
-import kr.co.fastcampus.eatgo.application.RestaurantService;
 import kr.co.fastcampus.eatgo.domain.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,18 +60,19 @@ class RestaurantServiceTest {
         Restaurant restaurant = Restaurant.builder()
                 .id(1004L)
                 .name("Bob zip")
+                .categoryId(1L)
                 .address("Seoul")
                 .build();
 
         restaurants.add(restaurant);
 
 
-        given(restaurantRepository.findAll()).willReturn(restaurants);
+        given(restaurantRepository.findAllByAddressContainingAndCategoryId("Seoul",1L)).willReturn(restaurants);
+
         given(restaurantRepository.findById(1004L)).willReturn(Optional.of(restaurant));
 
     }
 
-    @Test
     private void mockMenuItemRepository() {
 
         List<MenuItem> menuItems = new ArrayList<>();
@@ -87,9 +87,9 @@ class RestaurantServiceTest {
     @Test
     public void getRestaurants() {
 
-        List<Restaurant> restaurants = restaurantService.getRestaurants();
-
-
+        String region = "Seoul";
+        Long categoryId = 1L;
+        List<Restaurant> restaurants = restaurantService.getRestaurants(region, categoryId);
 
         Restaurant restaurant = restaurants.get(0);
         assertThat(restaurant.getId(),is(1004L));

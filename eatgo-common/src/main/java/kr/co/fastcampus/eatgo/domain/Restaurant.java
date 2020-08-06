@@ -25,6 +25,9 @@ public class Restaurant {
     @Setter
     private Long  id;
 
+    @NotNull
+    private Long categoryId;
+
     @NotEmpty
     private String name;
 
