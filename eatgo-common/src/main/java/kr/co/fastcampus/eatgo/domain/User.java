@@ -10,7 +10,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Builder
-@Getter
+@Getter @Setter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,5 +29,13 @@ public class User {
 
     public boolean isAdmin() {
         return level >= 100;
+    }
+
+    public boolean isActive() {
+        return level > 0;
+    }
+
+    public void deactive() {
+        level =0L;
     }
 }
