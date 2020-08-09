@@ -9,7 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import javax.validation.constraints.Email;
 import java.util.Optional;
 
 @Service
@@ -18,9 +17,16 @@ public class UserService {
 
     private UserRepository userRepository;
 
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder)
+    {
+        this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+
     }
 
     public User registerUser(String email, String name, String password) {
@@ -31,7 +37,6 @@ public class UserService {
             throw new EmailExistedException(email);
         }
 
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         String encodedPassword = passwordEncoder.encode(password);
 
@@ -47,4 +52,19 @@ public class UserService {
 
 
     }
+
+    public User authenticate(String email, String password) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EmailNotExistedException(email));
+
+
+        if(!passwordEncoder.matches(password, user.getPassword())){
+            throw new PasswordWrongException();
+        }
+
+        return user;
+    }
+
+
 }

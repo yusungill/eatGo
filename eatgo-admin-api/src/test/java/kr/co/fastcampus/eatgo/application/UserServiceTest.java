@@ -99,7 +99,6 @@ class UserServiceTest {
     @Test
     public void deactiveUser(){
 
-        userService.deactiveUser(1004L) ;
 
         Long id = 1004L;
 

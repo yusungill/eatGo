@@ -40,8 +40,9 @@ class UserControllerTest {
     @Test
     public void list() throws Exception {
         List<User> users = new ArrayList<>();
+
         users.add(User.builder()
-                .name("테스터")
+                .name("tester")
                 .email("tester@example.com")
                 .level(1L)
                 .build());
@@ -50,13 +51,12 @@ class UserControllerTest {
 
         mvc.perform(get("/users"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("테스터")));
+                .andExpect(content().string(containsString("tester")));
 
     }
 
     @Test
     public void create() throws Exception {
-        //관리자,사장님 만들어줄때
 
         String email = "admin@example.com";
         String name = "Administrator";

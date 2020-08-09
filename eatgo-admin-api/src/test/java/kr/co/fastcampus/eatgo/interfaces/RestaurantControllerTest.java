@@ -89,7 +89,6 @@ class RestaurantControllerTest {
 
     @Test
     public void detailWithNotExisted() throws Exception {
-        //예외 상황처리
         given(restaurantService.getRestaurant(404L))
                 .willThrow(new RestaurantNotFoundException(404L));
 
