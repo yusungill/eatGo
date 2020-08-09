@@ -23,9 +23,12 @@ public class User {
     private String email;
     @NotEmpty
     private String name;
-
     @NotNull
     private Long level;
+
+    private String password;
+
+
 
     public boolean isAdmin() {
         return level >= 100;
