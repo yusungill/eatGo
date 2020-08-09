@@ -2,8 +2,8 @@ package kr.co.fastcampus.eatgo.domain;
 
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 class UserTest {
 
@@ -16,11 +16,11 @@ class UserTest {
                 .level(100L)
                 .build();
 
-        assertThat(user.getName(), is("테스터"));
-        assertThat(user.isAdmin(), is(true));
-        assertThat(user.isActive() , is(true));
+        assertThat(user.getName()).isEqualTo("테스터");
+        assertThat(user.isAdmin()).isTrue();
+        assertThat(user.isActive()).isTrue();
 
         user.deactive();
-        assertThat(user.isActive() , is(false));
+        assertThat(user.isActive()).isFalse();
     }
 }
