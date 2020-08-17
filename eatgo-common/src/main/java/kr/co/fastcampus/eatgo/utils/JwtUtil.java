@@ -2,6 +2,7 @@ package kr.co.fastcampus.eatgo.utils;
 
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -18,11 +19,18 @@ public class JwtUtil {
 
     }
 
-    public String createToken(long userId, String name) {
+    public String createToken(long userId, String name, Long restaurantId) {
 
-        return Jwts.builder()
-                .claim("userId",userId)
-                .claim("name",name)
+        JwtBuilder builder = Jwts.builder()
+                .claim("userId", userId)
+                .claim("name", name);
+
+        if(restaurantId != null){
+
+            builder = builder.claim("restaurantId", restaurantId);
+        }
+
+        return builder
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
