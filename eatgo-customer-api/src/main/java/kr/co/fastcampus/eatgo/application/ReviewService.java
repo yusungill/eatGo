@@ -17,9 +17,17 @@ public class ReviewService {
     }
 
 
-    public Review addReview(Long restaurantId, Review review) {
+    public Review addReview(Long restaurantId, String name, Integer score,String description) {
 
-        review.setRestaurantId(restaurantId);
+        Review review = Review.builder().
+                restaurantId(restaurantId)
+                .name(name)
+                .score(score)
+                .description(description)
+                .build();
+
+
+
 
         return reviewRepository.save(review);
     }

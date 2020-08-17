@@ -4,7 +4,6 @@ package kr.co.fastcampus.eatgo.interfaces;
 import kr.co.fastcampus.eatgo.application.UserService;
 import kr.co.fastcampus.eatgo.domain.User;
 import kr.co.fastcampus.eatgo.utils.JwtUtil;
-import org.dom4j.jaxb.JAXBObjectHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,13 +34,13 @@ public class SessionController {
 
         String accessToken = jwtUtil.createToken(user.getId(), user.getName());
 
-//        String accessToken = jwtUtil.createToken(1004L, "John");
+        System.out.println(accessToken);
 
-        String uri = "/session";
         SessionResponseDto sessionResponseDto = SessionResponseDto.builder()
                 .accessToken(accessToken)
                 .build();
 
+        String uri = "/session";
 
         return ResponseEntity.created(new URI(uri))
                 .body(sessionResponseDto);
