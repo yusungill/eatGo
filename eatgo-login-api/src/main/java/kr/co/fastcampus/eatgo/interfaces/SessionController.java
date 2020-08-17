@@ -34,7 +34,6 @@ public class SessionController {
 
         String accessToken = jwtUtil.createToken(user.getId(), user.getName());
 
-        System.out.println(accessToken);
 
         SessionResponseDto sessionResponseDto = SessionResponseDto.builder()
                 .accessToken(accessToken)
